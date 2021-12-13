@@ -1,5 +1,5 @@
-from __future__ import division
-from __future__ import print_function
+# from __future__ import division
+# from __future__ import print_function
 
 import os
 import time
@@ -8,11 +8,11 @@ import numpy as np
 import sklearn
 from sklearn import metrics
 
-from graphsage.supervised_models import SupervisedGraphsage
-from graphsage.models import SAGEInfo
-from graphsage.minibatch import NodeMinibatchIterator
-from graphsage.neigh_samplers import UniformNeighborSampler
-from graphsage.utils import load_data
+from supervised_models import SupervisedGraphsage
+from models import SAGEInfo
+from minibatch import NodeMinibatchIterator
+from neigh_samplers import UniformNeighborSampler
+from utils import load_data
 
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 

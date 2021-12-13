@@ -1,1 +1,1 @@
-python -m graphsage.supervised_train --train_prefix ./example_data/ppi --model graphsage_mean --sigmoid
+python supervised_train.py --train_prefix ../example_data/toy-ppi --model graphsage_mean --sigmoid
