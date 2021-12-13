@@ -2,6 +2,7 @@
 # from __future__ import print_function
 
 import numpy as np
+import sys
 
 np.random.seed(123)
 
@@ -195,6 +196,7 @@ class NodeMinibatchIterator(object):
 
         self.G = G
         self.nodes = G.nodes()
+        # id_map
         self.id2idx = id2idx
         self.placeholders = placeholders
         self.batch_size = batch_size
@@ -206,11 +208,19 @@ class NodeMinibatchIterator(object):
         self.adj, self.deg = self.construct_adj()
         self.test_adj = self.construct_test_adj()
 
+        # val_nodes: 1825
         self.val_nodes = [n for n in self.G.nodes() if self.G.node[n]['val']]
+        # print('n_val_nodes: ', len(self.val_nodes))
+
+        # test_nodes: 3214
         self.test_nodes = [n for n in self.G.nodes() if self.G.node[n]['test']]
+        # print('n_test_nodes: ', len(self.test_nodes))
 
         self.no_train_nodes_set = set(self.val_nodes + self.test_nodes)
+        # train_nodes: 9716
         self.train_nodes = set(G.nodes()).difference(self.no_train_nodes_set)
+        # print('n_train_nodes: ', len(self.train_nodes))
+
         # don't train on nodes that only have edges to test set
         self.train_nodes = [n for n in self.train_nodes if self.deg[id2idx[n]] > 0]
 
@@ -225,7 +235,13 @@ class NodeMinibatchIterator(object):
         return label_vec
 
     def construct_adj(self):
+        # len(self.id2idx): 14755
+        # self.max_degree: 128
+        # print('id2idx', self.id2idx)
+        # print('id2idx.len', len(self.id2idx))
+        # adj.shape: (14756, 128)
         adj = len(self.id2idx)*np.ones((len(self.id2idx)+1, self.max_degree))
+        # print('adj.shape: ', adj.shape)
         deg = np.zeros((len(self.id2idx),))
 
         for nodeid in self.G.nodes():
@@ -240,8 +256,12 @@ class NodeMinibatchIterator(object):
             if len(neighbors) > self.max_degree:
                 neighbors = np.random.choice(neighbors, self.max_degree, replace=False)
             elif len(neighbors) < self.max_degree:
+                # 'replace=True' means that samples can be the same
                 neighbors = np.random.choice(neighbors, self.max_degree, replace=True)
+                # print('node_id: ', nodeid, ', neighbors: ', neighbors)
             adj[self.id2idx[nodeid], :] = neighbors
+        # print('adj: ', adj)
+        # deg.shape: (14755,)
         return adj, deg
 
     def construct_test_adj(self):

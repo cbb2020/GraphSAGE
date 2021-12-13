@@ -72,6 +72,25 @@ def load_data(prefix, normalize=True, load_walks=False):
             for line in fp:
                 walks.append(map(conversion, line.split()))
 
+    # print('G.n_nodes: ', len(G.nodes()))
+    # print('G.node: ', G.node[10000])
+    # print('G.n_edges: ', len(G.edges()))
+    # print('feats: ', feats.shape)
+    # print('feat: ', feats[0])
+    # print('id_map: ', id_map.keys())
+    # print('walks: ', walks)
+    # print('class_map: ', class_map)
+    # print('class: ', len(class_map[11754]))
+
+    # G.n_nodes: 14755
+    # G.node[10000] : ('G.node: ',
+    #   {u'test': False, u'feature': [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+    #    u'val': True, u'label': [0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0]})
+    # G.n_edges: 228431
+    # n_feats: (14755, 50)
+    # id_map: dic, 'id_map' -> [0, 1, ..., 11754]
+    # walks: list, [](null)
+    # class_map: dic, 'node_n' -> [1, 0, ..., 1, 0](len:121)
     return G, feats, id_map, walks, class_map
 
 def run_random_walks(G, nodes, num_walks=N_WALKS):

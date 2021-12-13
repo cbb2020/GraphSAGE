@@ -7,6 +7,7 @@ import tensorflow as tf
 import numpy as np
 import sklearn
 from sklearn import metrics
+import sys
 
 from supervised_models import SupervisedGraphsage
 from models import SAGEInfo
@@ -129,6 +130,8 @@ def train(train_data, test_data=None):
         num_classes = len(list(class_map.values())[0])
     else:
         num_classes = len(set(class_map.values()))
+    # num_classes: 121
+    # print('num_classes: ', num_classes)
 
     if not features is None:
         # pad with dummy zero vector
@@ -144,6 +147,8 @@ def train(train_data, test_data=None):
             batch_size=FLAGS.batch_size,
             max_degree=FLAGS.max_degree, 
             context_pairs = context_pairs)
+    # print('minibatch.adj.shape: ', minibatch.adj.shape)
+    # shape: (14756, 128)
     adj_info_ph = tf.placeholder(tf.int32, shape=minibatch.adj.shape)
     adj_info = tf.Variable(adj_info_ph, trainable=False, name="adj_info")
 
