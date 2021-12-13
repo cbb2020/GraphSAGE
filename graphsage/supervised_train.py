@@ -155,6 +155,9 @@ def train(train_data, test_data=None):
     if FLAGS.model == 'graphsage_mean':
         # Create model
         sampler = UniformNeighborSampler(adj_info)
+        # FLAGS.samples_1 = 25
+        # FLAGS.samples_2 = 10
+        # FLAGS.samples_3 = 0
         if FLAGS.samples_3 != 0:
             layer_infos = [SAGEInfo("node", sampler, FLAGS.samples_1, FLAGS.dim_1),
                                 SAGEInfo("node", sampler, FLAGS.samples_2, FLAGS.dim_2),
