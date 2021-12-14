@@ -184,6 +184,7 @@ class MaxPoolingAggregator(Layer):
         num_neighbors = dims[1]
         # [nodes * sampled neighbors] x [hidden_dim]
         h_reshaped = tf.reshape(neigh_h, (batch_size * num_neighbors, self.neigh_input_dim))
+        # print('h_reshaped: ', h_reshaped.shape)
 
         for l in self.mlp_layers:
             h_reshaped = l(h_reshaped)
