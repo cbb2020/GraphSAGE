@@ -258,7 +258,7 @@ class SampleAndAggregate(GeneralizedModel):
             inputs: batch inputs
             batch_size: the number of inputs (different for batch inputs and negative samples).
         """
-        
+        # print('batch_size: ', self.batch_size)
         if batch_size is None:
             batch_size = self.batch_size
         samples = [inputs]
@@ -267,11 +267,18 @@ class SampleAndAggregate(GeneralizedModel):
         support_sizes = [support_size]
         for k in range(len(layer_infos)):
             t = len(layer_infos) - k - 1
+            # print('k=', k)
+            # print('t=', t)
+            # print('layer_info[t]: ', layer_infos[t])
             support_size *= layer_infos[t].num_samples
+            # print('support_size: ', support_size)
             sampler = layer_infos[t].neigh_sampler
             node = sampler((samples[k], layer_infos[t].num_samples))
             samples.append(tf.reshape(node, [support_size * batch_size,]))
             support_sizes.append(support_size)
+        # print('samples: ', samples[1])
+        # print('support_sizes: ', support_sizes)
+        # support_sizes: [1, 10, 250]
         return samples, support_sizes
 
 
@@ -305,10 +312,19 @@ class SampleAndAggregate(GeneralizedModel):
                 dim_mult = 2 if concat and (layer != 0) else 1
                 # aggregator at current layer
                 if layer == len(num_samples) - 1:
+                    # print('layer1: ', layer)
+                    # print('dim_mult*dims[layer]: ', dim_mult*dims[layer])
+                    # print('dims[layer+1]', dims[layer+1])
+                    # dims: [50, 128, 128]
+                    # layer1, dim_mult*dims[layer] = 256, dims[layer + 1] = 128
                     aggregator = self.aggregator_cls(dim_mult*dims[layer], dims[layer+1], act=lambda x : x,
                             dropout=self.placeholders['dropout'], 
                             name=name, concat=concat, model_size=model_size)
                 else:
+                    # print('layer0: ', layer)
+                    # print('dim_mult*dims[layer]: ', dim_mult * dims[layer])
+                    # print('dims[layer+1]', dims[layer + 1])
+                    # layer0, dim_mult*dims[layer] = 50, dims[layer + 1] = 128
                     aggregator = self.aggregator_cls(dim_mult*dims[layer], dims[layer+1],
                             dropout=self.placeholders['dropout'], 
                             name=name, concat=concat, model_size=model_size)
@@ -323,6 +339,7 @@ class SampleAndAggregate(GeneralizedModel):
                 neigh_dims = [batch_size * support_sizes[hop], 
                               num_samples[len(num_samples) - hop - 1], 
                               dim_mult*dims[layer]]
+                # print('neigh_dims: ', neigh_dims)
                 h = aggregator((hidden[hop],
                                 tf.reshape(hidden[hop + 1], neigh_dims)))
                 next_hidden.append(h)

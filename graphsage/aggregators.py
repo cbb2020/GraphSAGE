@@ -42,16 +42,26 @@ class MeanAggregator(Layer):
 
     def _call(self, inputs):
         self_vecs, neigh_vecs = inputs
+        # print('inputs: ', inputs)
+        # print('self_vecs: ', self_vecs.shape)
+        # print('neigh_vecs: ', neigh_vecs)
 
         neigh_vecs = tf.nn.dropout(neigh_vecs, 1-self.dropout)
         self_vecs = tf.nn.dropout(self_vecs, 1-self.dropout)
         neigh_means = tf.reduce_mean(neigh_vecs, axis=1)
-       
-        # [nodes] x [out_dim]
-        from_neighs = tf.matmul(neigh_means, self.vars['neigh_weights'])
 
+        # [nodes] x [out_dim]
+        # W0.shape: (50, 128), W1.shape: (256, 128)
+        # from_neighs.shape: (?, 128)
+        from_neighs = tf.matmul(neigh_means, self.vars['neigh_weights'])
+        # print('w.shape: ', self.vars['neigh_weights'])
+        # print('from_neighs.shape: ', from_neighs)
+
+        # shape: the same as neigh_weights
         from_self = tf.matmul(self_vecs, self.vars["self_weights"])
-         
+        # print('w.shape: ', self.vars['self_weights'])
+        # print('from_self.shape: ', from_self)
+
         if not self.concat:
             output = tf.add_n([from_self, from_neighs])
         else:

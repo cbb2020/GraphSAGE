@@ -76,8 +76,15 @@ class SupervisedGraphsage(models.SampleAndAggregate):
 
 
     def build(self):
+        # support_sizes1 = [1, 10, 250]
         samples1, support_sizes1 = self.sample(self.inputs1, self.layer_infos)
+        # print('samples1: ', samples1)
+        # print('support_sizes1: ', support_sizes1)
+        # [25, 10]
         num_samples = [layer_info.num_samples for layer_info in self.layer_infos]
+        # print('num_samples: ', num_samples)
+        # print('self.dims: ', self.dims)
+        # self.dims: [50, 128, 128]
         self.outputs1, self.aggregators = self.aggregate(samples1, [self.features], self.dims, num_samples,
                 support_sizes1, concat=self.concat, model_size=self.model_size)
         dim_mult = 2 if self.concat else 1
@@ -85,6 +92,9 @@ class SupervisedGraphsage(models.SampleAndAggregate):
         self.outputs1 = tf.nn.l2_normalize(self.outputs1, 1)
 
         dim_mult = 2 if self.concat else 1
+        # print('input_dim: ', dim_mult*self.dims[-1])
+        # print('out_dim: ', self.num_classes)
+        # input_dim: 256, output_dim: 121
         self.node_pred = layers.Dense(dim_mult*self.dims[-1], self.num_classes, 
                 dropout=self.placeholders['dropout'],
                 act=lambda x : x)

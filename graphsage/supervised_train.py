@@ -158,6 +158,7 @@ def train(train_data, test_data=None):
         # FLAGS.samples_1 = 25
         # FLAGS.samples_2 = 10
         # FLAGS.samples_3 = 0
+        # FLAGS.dim_1 = FLAGS.dim_2 = 128
         if FLAGS.samples_3 != 0:
             layer_infos = [SAGEInfo("node", sampler, FLAGS.samples_1, FLAGS.dim_1),
                                 SAGEInfo("node", sampler, FLAGS.samples_2, FLAGS.dim_2),
