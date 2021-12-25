@@ -49,6 +49,7 @@ class MeanAggregator(Layer):
         neigh_vecs = tf.nn.dropout(neigh_vecs, 1-self.dropout)
         self_vecs = tf.nn.dropout(self_vecs, 1-self.dropout)
         neigh_means = tf.reduce_mean(neigh_vecs, axis=1)
+        print('neigh_means.type: ', type(neigh_means))
 
         # [nodes] x [out_dim]
         # W0.shape: (50, 128), W1.shape: (256, 128)
